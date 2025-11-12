@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleMate - Your Personal Style Assistant</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config with Custom Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-bg': '#FDF7F5',
+                        'brand-card': '#FFFBF9',
+                        'brand-primary': '#E6BDB5',
+                        'brand-text': '#7B5C57',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Fade-in animation for screen transitions */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .screen-active {
+            animation: fadeIn 0.4s ease-in;
+        }
+    </style>
+</head>
+<body class="bg-gray-300 min-h-screen flex items-center justify-center p-4">
+    
+    <!-- Mobile Phone Frame -->
+    <div class="relative w-[395px] h-[810px] bg-gray-900 rounded-[50px] shadow-2xl p-3">
+        <!-- Phone Notch -->
+        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-3xl z-10"></div>
+        
+        <!-- Phone Screen Container -->
+        <div class="relative w-full h-full bg-brand-bg rounded-[40px] overflow-hidden">
+            
+            <!-- Screen 1: Welcome Screen -->
+            <div id="screen-1" class="screen absolute inset-0 flex flex-col items-center justify-center p-8 overflow-y-auto">
+                <h1 class="text-5xl font-bold text-brand-text mb-8 tracking-tight">StyleMate</h1>
+                
+                <div class="mb-12">
+                    <img src="https://placehold.co/224x224/E6BDB5/FFF?text=StyleMate" 
+                         alt="StyleMate Logo" 
+                         class="rounded-full shadow-lg">
+                </div>
+                
+                <div class="w-full max-w-xs space-y-4">
+                    <button onclick="showScreen('screen-2')" 
+                            class="w-full bg-brand-primary hover:bg-opacity-90 text-brand-text font-semibold py-4 px-6 rounded-full shadow-md transition duration-300 transform hover:scale-105">
+                        Upload Selfie
+                    </button>
+                    
+                    <button onclick="showScreen('screen-2')" 
+                            class="w-full bg-brand-card hover:bg-brand-primary hover:bg-opacity-50 text-brand-text font-semibold py-4 px-6 rounded-full border-2 border-brand-primary shadow-md transition duration-300 transform hover:scale-105">
+                        Select Occasion
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Screen 2: Upload & Occasion Screen -->
+            <div id="screen-2" class="screen hidden absolute inset-0 flex flex-col p-6 overflow-y-auto">
+                <div class="mb-6">
+                    <button onclick="showScreen('screen-1')" 
+                            class="text-brand-text hover:text-brand-primary transition duration-300 flex items-center">
+                        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                        Back
+                    </button>
+                </div>
+                
+                <h2 class="text-3xl font-bold text-brand-text mb-8 text-center">Upload your photo</h2>
+                
+                <div class="flex-1 flex flex-col justify-center">
+                    <!-- Upload Photo Area -->
+                    <div onclick="alert('Photo upload functionality would open camera/gallery here')" 
+                         class="w-full bg-brand-card border-4 border-dashed border-brand-primary rounded-3xl p-12 mb-6 flex flex-col items-center justify-center cursor-pointer hover:bg-brand-primary hover:bg-opacity-20 transition duration-300">
+                        <svg class="w-24 h-24 text-brand-primary mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        <p class="text-brand-text text-sm font-medium">Tap to upload photo</p>
+                    </div>
+                    
+                    <!-- Occasion Dropdown -->
+                    <div class="mb-8">
+                        <label class="block text-brand-text font-semibold mb-2 text-lg">Occasion:</label>
+                        <select id="occasion-select" 
+                                class="w-full bg-brand-card text-brand-text border-2 border-brand-primary rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-primary">
+                            <option value="party">Party</option>
+                            <option value="class">Class</option>
+                            <option value="office">Office Day</option>
+                            <option value="date">Date</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Get My Style Button -->
+                    <button onclick="showScreen('screen-loading')" 
+                            class="w-full bg-brand-primary hover:bg-opacity-90 text-brand-text font-bold py-4 px-6 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+                        Get My Style!
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Screen 3: Loading Screen -->
+            <div id="screen-loading" class="screen hidden absolute inset-0 flex flex-col items-center justify-center p-8">
+                <div class="text-center">
+                    <!-- Loading Spinner -->
+                    <div class="mb-8">
+                        <svg class="animate-spin h-20 w-20 text-brand-primary mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </div>
+                    
+                    <p class="text-brand-text text-xl font-medium">Analyzing your features...</p>
+                    <p class="text-brand-text text-sm mt-2 opacity-70">Please wait a moment</p>
+                </div>
+            </div>
+            
+            <!-- Screen 4: Suggestions Screen -->
+            <div id="screen-3" class="screen hidden absolute inset-0 flex flex-col p-6 overflow-y-auto">
+                <h2 class="text-3xl font-bold text-brand-text mb-6 text-center">Your Style Suggestions</h2>
+                
+                <div class="flex-1 flex flex-col">
+                    <!-- Main Outfit Image -->
+                    <div class="bg-brand-card rounded-3xl p-4 mb-6 shadow-lg">
+                        <img src="https://placehold.co/300x350/E6BDB5/FFF?text=Outfit" 
+                             alt="Suggested Outfit" 
+                             class="w-full rounded-2xl">
+                    </div>
+                    
+                    <!-- Accessories Section -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-brand-text mb-3">Accessories</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Gold Earrings Card -->
+                            <div class="bg-brand-card rounded-2xl p-4 shadow-md">
+                                <img src="https://placehold.co/80x80/E6BDB5/FFF?text=Earrings" 
+                                     alt="Gold Earrings" 
+                                     class="w-20 h-20 mx-auto rounded-xl mb-2">
+                                <p class="text-brand-text text-center text-sm font-medium">Gold earrings</p>
+                            </div>
+                            
+                            <!-- Pink Heels Card -->
+                            <div class="bg-brand-card rounded-2xl p-4 shadow-md">
+                                <img src="https://placehold.co/80x80/E6BDB5/FFF?text=Heels" 
+                                     alt="Pink Heels" 
+                                     class="w-20 h-20 mx-auto rounded-xl mb-2">
+                                <p class="text-brand-text text-center text-sm font-medium">Pink heels</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="space-y-3 mt-auto">
+                        <button onclick="showScreen('screen-4')" 
+                                class="w-full bg-brand-primary hover:bg-opacity-90 text-brand-text font-bold py-4 px-6 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+                            Looks Good! Save it.
+                        </button>
+                        
+                        <button onclick="showScreen('screen-2')" 
+                                class="w-full bg-brand-card hover:bg-brand-primary hover:bg-opacity-50 text-brand-text font-semibold py-4 px-6 rounded-full border-2 border-brand-primary shadow-md transition duration-300">
+                            Try Again
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Screen 5: Save Screen -->
+            <div id="screen-4" class="screen hidden absolute inset-0 flex flex-col p-6 overflow-y-auto">
+                <h2 class="text-3xl font-bold text-brand-text mb-6 text-center">Save</h2>
+                
+                <div class="flex-1 flex flex-col">
+                    <!-- Final Look Image -->
+                    <div class="bg-brand-card rounded-3xl p-4 mb-8 shadow-lg">
+                        <img src="https://placehold.co/300x350/E6BDB5/FFF?text=Final+Look" 
+                             alt="Final Look" 
+                             class="w-full rounded-2xl">
+                        <p class="text-brand-text text-center mt-4 text-sm font-medium">Your perfect look is ready!</p>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="space-y-3 mt-auto">
+                        <button onclick="saveToCloset()" 
+                                class="w-full bg-brand-primary hover:bg-opacity-90 text-brand-text font-bold py-4 px-6 rounded-full shadow-lg transition duration-300 transform hover:scale-105 flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Save to closet
+                        </button>
+                        
+                        <button onclick="shareWithFriend()" 
+                                class="w-full bg-brand-card hover:bg-brand-primary hover:bg-opacity-50 text-brand-text font-semibold py-4 px-6 rounded-full border-2 border-brand-primary shadow-md transition duration-300 flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                            </svg>
+                            Share with friend
+                        </button>
+                        
+                        <button onclick="showScreen('screen-1')" 
+                                class="w-full text-brand-text hover:text-brand-primary font-medium py-3 transition duration-300 flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            Start New Style
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        // Screen management function
+        function showScreen(screenId) {
+            // Get all screen elements
+            const screens = document.querySelectorAll('.screen');
+            
+            // Hide all screens
+            screens.forEach(screen => {
+                screen.classList.add('hidden');
+                screen.classList.remove('screen-active');
+            });
+            
+            // Show the target screen with fade-in animation
+            const targetScreen = document.getElementById(screenId);
+            if (targetScreen) {
+                targetScreen.classList.remove('hidden');
+                // Small delay to ensure the hidden class is removed before animation starts
+                setTimeout(() => {
+                    targetScreen.classList.add('screen-active');
+                }, 10);
+            }
+            
+            // Special handling for loading screen
+            if (screenId === 'screen-loading') {
+                // After 3 seconds, automatically navigate to suggestions screen
+                setTimeout(() => {
+                    showScreen('screen-3');
+                }, 3000);
+            }
+        }
+        
+        // Save to closet function
+        function saveToCloset() {
+            alert('Saved to your virtual closet!');
+        }
+        
+        // Share with friend function
+        function shareWithFriend() {
+            alert('Share link copied!');
+        }
+        
+        // Initialize: Show the first screen on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            showScreen('screen-1');
+        });
+    </script>
+    
+</body>
+</html>
