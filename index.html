@@ -40,36 +40,40 @@
         }
     </style>
 </head>
-<body class="bg-gray-300 min-h-screen flex items-center justify-center p-4">
+<body class="bg-brand-bg min-h-screen flex items-center justify-center p-4">
     
-    <!-- Mobile Phone Frame -->
-    <div class="relative w-[395px] h-[810px] bg-gray-900 rounded-[50px] shadow-2xl p-3">
-        <!-- Phone Notch -->
-        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-3xl z-10"></div>
-        
-        <!-- Phone Screen Container -->
-        <div class="relative w-full h-full bg-brand-bg rounded-[40px] overflow-hidden">
+    <!-- Mobile Screen Container -->
+    <div class="relative w-full max-w-[375px] h-[750px] bg-brand-bg overflow-hidden shadow-xl">
             
             <!-- Screen 1: Welcome Screen -->
-            <div id="screen-1" class="screen absolute inset-0 flex flex-col items-center justify-center p-8 overflow-y-auto">
-                <h1 class="text-5xl font-bold text-brand-text mb-8 tracking-tight">StyleMate</h1>
-                
-                <div class="mb-12">
-                    <img src="https://placehold.co/224x224/E6BDB5/FFF?text=StyleMate" 
-                         alt="StyleMate Logo" 
-                         class="rounded-full shadow-lg">
+            <div id="screen-1" class="screen absolute inset-0 flex flex-col items-center justify-between p-8 overflow-y-auto">
+                <div class="flex-1 flex flex-col items-center justify-center">
+                    <h1 class="text-5xl font-bold text-brand-text mb-8 tracking-tight">StyleMate</h1>
+                    
+                    <div class="mb-12">
+                        <img src="https://placehold.co/224x224/E6BDB5/FFF?text=StyleMate" 
+                             alt="StyleMate Logo" 
+                             class="rounded-full shadow-lg">
+                    </div>
+                    
+                    <div class="w-full max-w-xs space-y-4">
+                        <button onclick="showScreen('screen-2')" 
+                                class="w-full bg-brand-primary hover:bg-opacity-90 text-brand-text font-semibold py-4 px-6 rounded-full shadow-md transition duration-300 transform hover:scale-105">
+                            Upload Selfie
+                        </button>
+                        
+                        <button onclick="showScreen('screen-2')" 
+                                class="w-full bg-brand-card hover:bg-brand-primary hover:bg-opacity-50 text-brand-text font-semibold py-4 px-6 rounded-full border-2 border-brand-primary shadow-md transition duration-300 transform hover:scale-105">
+                            Select Occasion
+                        </button>
+                    </div>
                 </div>
                 
-                <div class="w-full max-w-xs space-y-4">
-                    <button onclick="showScreen('screen-2')" 
-                            class="w-full bg-brand-primary hover:bg-opacity-90 text-brand-text font-semibold py-4 px-6 rounded-full shadow-md transition duration-300 transform hover:scale-105">
-                        Upload Selfie
-                    </button>
-                    
-                    <button onclick="showScreen('screen-2')" 
-                            class="w-full bg-brand-card hover:bg-brand-primary hover:bg-opacity-50 text-brand-text font-semibold py-4 px-6 rounded-full border-2 border-brand-primary shadow-md transition duration-300 transform hover:scale-105">
-                        Select Occasion
-                    </button>
+                <!-- Credit Footer -->
+                <div class="mt-8 text-center">
+                    <p class="text-brand-text text-sm font-medium">Designed & Developed by</p>
+                    <p class="text-brand-text text-base font-bold mt-1">Ismita Jahan</p>
+                    <p class="text-brand-text text-xs opacity-70 mt-1">(BBA-12, Alpha)</p>
                 </div>
             </div>
             
@@ -85,23 +89,44 @@
                     </button>
                 </div>
                 
-                <h2 class="text-3xl font-bold text-brand-text mb-8 text-center">Upload your photo</h2>
+                <h2 class="text-3xl font-bold text-brand-text mb-6 text-center">Upload your photo</h2>
                 
                 <div class="flex-1 flex flex-col justify-center">
-                    <!-- Upload Photo Area -->
-                    <div onclick="alert('Photo upload functionality would open camera/gallery here')" 
-                         class="w-full bg-brand-card border-4 border-dashed border-brand-primary rounded-3xl p-12 mb-6 flex flex-col items-center justify-center cursor-pointer hover:bg-brand-primary hover:bg-opacity-20 transition duration-300">
-                        <svg class="w-24 h-24 text-brand-primary mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
-                                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
-                                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
-                        </svg>
-                        <p class="text-brand-text text-sm font-medium">Tap to upload photo</p>
+                    <!-- Webcam Video Container -->
+                    <div id="camera-container" class="w-full bg-brand-card border-4 border-dashed border-brand-primary rounded-3xl overflow-hidden mb-4">
+                        <video id="webcam" class="w-full h-auto hidden" autoplay playsinline></video>
+                        <canvas id="canvas" class="hidden"></canvas>
+                        
+                        <!-- Camera Placeholder (shown before camera starts) -->
+                        <div id="camera-placeholder" class="flex flex-col items-center justify-center p-12">
+                            <svg class="w-24 h-24 text-brand-primary mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                                      d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                                      d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            <p class="text-brand-text text-sm font-medium">Ready to capture</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Status Message -->
+                    <p id="photo-status" class="text-center text-brand-text text-sm mb-4 min-h-[20px]"></p>
+                    
+                    <!-- Camera Controls -->
+                    <div class="space-y-3 mb-6">
+                        <button id="start-camera-btn" onclick="startCamera()" 
+                                class="w-full bg-brand-primary hover:bg-opacity-90 text-brand-text font-semibold py-3 px-6 rounded-full shadow-md transition duration-300">
+                            Start Camera
+                        </button>
+                        
+                        <button id="capture-btn" onclick="capturePhoto()" disabled
+                                class="w-full bg-brand-text text-white font-semibold py-3 px-6 rounded-full shadow-md transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                            Capture Photo
+                        </button>
                     </div>
                     
                     <!-- Occasion Dropdown -->
-                    <div class="mb-8">
+                    <div class="mb-6">
                         <label class="block text-brand-text font-semibold mb-2 text-lg">Occasion:</label>
                         <select id="occasion-select" 
                                 class="w-full bg-brand-card text-brand-text border-2 border-brand-primary rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-primary">
@@ -113,8 +138,8 @@
                     </div>
                     
                     <!-- Get My Style Button -->
-                    <button onclick="showScreen('screen-loading')" 
-                            class="w-full bg-brand-primary hover:bg-opacity-90 text-brand-text font-bold py-4 px-6 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+                    <button id="get-style-btn" onclick="getStyle()" disabled
+                            class="w-full bg-brand-primary hover:bg-opacity-90 text-brand-text font-bold py-4 px-6 rounded-full shadow-lg transition duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
                         Get My Style!
                     </button>
                 </div>
@@ -138,34 +163,114 @@
             
             <!-- Screen 4: Suggestions Screen -->
             <div id="screen-3" class="screen hidden absolute inset-0 flex flex-col p-6 overflow-y-auto">
-                <h2 class="text-3xl font-bold text-brand-text mb-6 text-center">Your Style Suggestions</h2>
+                <h2 class="text-2xl font-bold text-brand-text mb-3 text-center">Here's your style,<br>based on your photo:</h2>
                 
                 <div class="flex-1 flex flex-col">
-                    <!-- Main Outfit Image -->
-                    <div class="bg-brand-card rounded-3xl p-4 mb-6 shadow-lg">
-                        <img src="https://placehold.co/300x350/E6BDB5/FFF?text=Outfit" 
-                             alt="Suggested Outfit" 
-                             class="w-full rounded-2xl">
+                    <!-- User's Captured Photo -->
+                    <div class="bg-brand-card rounded-3xl p-4 mb-4 shadow-lg">
+                        <img id="suggestion-user-photo" 
+                             alt="Your Captured Photo" 
+                             class="w-full h-auto rounded-2xl">
                     </div>
+                    
+                    <p class="text-brand-text text-center text-sm mb-4 font-medium">Suggested Outfit & Accessories</p>
                     
                     <!-- Accessories Section -->
                     <div class="mb-6">
-                        <h3 class="text-lg font-semibold text-brand-text mb-3">Accessories</h3>
+                        <h3 class="text-lg font-semibold text-brand-text mb-3">Recommended Accessories</h3>
                         <div class="grid grid-cols-2 gap-4">
                             <!-- Gold Earrings Card -->
-                            <div class="bg-brand-card rounded-2xl p-4 shadow-md">
-                                <img src="https://placehold.co/80x80/E6BDB5/FFF?text=Earrings" 
-                                     alt="Gold Earrings" 
-                                     class="w-20 h-20 mx-auto rounded-xl mb-2">
-                                <p class="text-brand-text text-center text-sm font-medium">Gold earrings</p>
+                            <div class="bg-brand-card rounded-2xl p-4 shadow-md hover:shadow-lg transition duration-300">
+                                <div class="w-full aspect-square bg-white rounded-xl mb-2 flex items-center justify-center overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=200&h=200&fit=crop&q=80" 
+                                         alt="Gold Earrings" 
+                                         class="w-full h-full object-cover">
+                                </div>
+                                <p class="text-brand-text text-center text-sm font-medium">Gold Hoop Earrings</p>
+                                <p class="text-brand-text text-center text-xs opacity-70">$45</p>
                             </div>
                             
-                            <!-- Pink Heels Card -->
-                            <div class="bg-brand-card rounded-2xl p-4 shadow-md">
-                                <img src="https://placehold.co/80x80/E6BDB5/FFF?text=Heels" 
-                                     alt="Pink Heels" 
-                                     class="w-20 h-20 mx-auto rounded-xl mb-2">
-                                <p class="text-brand-text text-center text-sm font-medium">Pink heels</p>
+                            <!-- Necklace Card -->
+                            <div class="bg-brand-card rounded-2xl p-4 shadow-md hover:shadow-lg transition duration-300">
+                                <div class="w-full aspect-square bg-white rounded-xl mb-2 flex items-center justify-center overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=200&h=200&fit=crop&q=80" 
+                                         alt="Necklace" 
+                                         class="w-full h-full object-cover">
+                                </div>
+                                <p class="text-brand-text text-center text-sm font-medium">Delicate Necklace</p>
+                                <p class="text-brand-text text-center text-xs opacity-70">$65</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Beauty & Makeup Section -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-brand-text mb-3">Beauty Essentials</h3>
+                        <div class="grid grid-cols-3 gap-3">
+                            <!-- Lipstick -->
+                            <div class="bg-brand-card rounded-xl p-3 shadow-md hover:shadow-lg transition duration-300">
+                                <div class="w-full aspect-square bg-white rounded-lg mb-2 flex items-center justify-center overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=150&h=150&fit=crop&q=80" 
+                                         alt="Lipstick" 
+                                         class="w-full h-full object-cover">
+                                </div>
+                                <p class="text-brand-text text-center text-xs font-medium">Pink Lipstick</p>
+                            </div>
+                            
+                            <!-- Blush/Highlighter -->
+                            <div class="bg-brand-card rounded-xl p-3 shadow-md hover:shadow-lg transition duration-300">
+                                <div class="w-full aspect-square bg-white rounded-lg mb-2 flex items-center justify-center overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=150&h=150&fit=crop&q=80" 
+                                         alt="Blush" 
+                                         class="w-full h-full object-cover">
+                                </div>
+                                <p class="text-brand-text text-center text-xs font-medium">Blush Palette</p>
+                            </div>
+                            
+                            <!-- Eyeshadow -->
+                            <div class="bg-brand-card rounded-xl p-3 shadow-md hover:shadow-lg transition duration-300">
+                                <div class="w-full aspect-square bg-white rounded-lg mb-2 flex items-center justify-center overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1583241800698-c318db25305b?w=150&h=150&fit=crop&q=80" 
+                                         alt="Eyeshadow" 
+                                         class="w-full h-full object-cover">
+                                </div>
+                                <p class="text-brand-text text-center text-xs font-medium">Eyeshadow</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hair & Face Accessories -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-brand-text mb-3">Hair & Face</h3>
+                        <div class="grid grid-cols-3 gap-3">
+                            <!-- Hair Clips -->
+                            <div class="bg-brand-card rounded-xl p-3 shadow-md hover:shadow-lg transition duration-300">
+                                <div class="w-full aspect-square bg-white rounded-lg mb-2 flex items-center justify-center overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1595777216528-071e0127ccf4?w=150&h=150&fit=crop&q=80" 
+                                         alt="Hair Clips" 
+                                         class="w-full h-full object-cover">
+                                </div>
+                                <p class="text-brand-text text-center text-xs font-medium">Hair Clips</p>
+                            </div>
+                            
+                            <!-- Sunglasses -->
+                            <div class="bg-brand-card rounded-xl p-3 shadow-md hover:shadow-lg transition duration-300">
+                                <div class="w-full aspect-square bg-white rounded-lg mb-2 flex items-center justify-center overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=150&h=150&fit=crop&q=80" 
+                                         alt="Sunglasses" 
+                                         class="w-full h-full object-cover">
+                                </div>
+                                <p class="text-brand-text text-center text-xs font-medium">Sunglasses</p>
+                            </div>
+                            
+                            <!-- Headband -->
+                            <div class="bg-brand-card rounded-xl p-3 shadow-md hover:shadow-lg transition duration-300">
+                                <div class="w-full aspect-square bg-white rounded-lg mb-2 flex items-center justify-center overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=150&h=150&fit=crop&q=80" 
+                                         alt="Headband" 
+                                         class="w-full h-full object-cover">
+                                </div>
+                                <p class="text-brand-text text-center text-xs font-medium">Headband</p>
                             </div>
                         </div>
                     </div>
@@ -228,10 +333,13 @@
             </div>
             
         </div>
-    </div>
     
     <!-- JavaScript -->
     <script>
+        // Global variable to store captured image data
+        let capturedImageData = null;
+        let webcamStream = null;
+        
         // Screen management function
         function showScreen(screenId) {
             // Get all screen elements
@@ -260,6 +368,132 @@
                     showScreen('screen-3');
                 }, 3000);
             }
+            
+            // Reset screen-2 when going back to it
+            if (screenId === 'screen-2') {
+                resetScreen2();
+            }
+        }
+        
+        // Start Camera Function
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        facingMode: 'user',
+                        width: { ideal: 640 },
+                        height: { ideal: 480 }
+                    } 
+                });
+                
+                webcamStream = stream;
+                const video = document.getElementById('webcam');
+                video.srcObject = stream;
+                
+                // Show video, hide placeholder
+                video.classList.remove('hidden');
+                document.getElementById('camera-placeholder').classList.add('hidden');
+                
+                // Enable capture button
+                document.getElementById('capture-btn').disabled = false;
+                
+                // Disable start camera button
+                document.getElementById('start-camera-btn').disabled = true;
+                document.getElementById('start-camera-btn').classList.add('opacity-50', 'cursor-not-allowed');
+                
+                document.getElementById('photo-status').textContent = 'Camera ready! Click "Capture Photo"';
+                document.getElementById('photo-status').classList.add('text-green-600');
+                
+            } catch (error) {
+                console.error('Error accessing webcam:', error);
+                document.getElementById('photo-status').textContent = 'Error: Could not access camera. Please allow camera permissions.';
+                document.getElementById('photo-status').classList.add('text-red-600');
+            }
+        }
+        
+        // Capture Photo Function
+        function capturePhoto() {
+            const video = document.getElementById('webcam');
+            const canvas = document.getElementById('canvas');
+            const context = canvas.getContext('2d');
+            
+            // Set canvas dimensions to match video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            // Draw the current video frame to canvas
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Get image data as base64
+            capturedImageData = canvas.toDataURL('image/jpeg', 0.9);
+            
+            // Stop the camera
+            stopCamera();
+            
+            // Update UI
+            document.getElementById('photo-status').textContent = '✓ Photo Captured! Now select an occasion and click "Get My Style!"';
+            document.getElementById('photo-status').classList.remove('text-green-600');
+            document.getElementById('photo-status').classList.add('text-brand-text', 'font-semibold');
+            
+            // Enable "Get My Style" button
+            document.getElementById('get-style-btn').disabled = false;
+            
+            // Disable capture button
+            document.getElementById('capture-btn').disabled = true;
+        }
+        
+        // Stop Camera Function
+        function stopCamera() {
+            if (webcamStream) {
+                webcamStream.getTracks().forEach(track => track.stop());
+                webcamStream = null;
+            }
+            
+            const video = document.getElementById('webcam');
+            video.srcObject = null;
+            video.classList.add('hidden');
+            
+            // Show placeholder again
+            document.getElementById('camera-placeholder').classList.remove('hidden');
+        }
+        
+        // Get Style Function
+        function getStyle() {
+            if (!capturedImageData) {
+                alert('Please capture a photo first!');
+                return;
+            }
+            
+            // Show loading screen
+            showScreen('screen-loading');
+            
+            // After 3 seconds, show suggestions with the captured photo
+            setTimeout(() => {
+                // Set the captured image to the suggestion screen
+                const suggestionImg = document.getElementById('suggestion-user-photo');
+                if (suggestionImg && capturedImageData) {
+                    suggestionImg.src = capturedImageData;
+                }
+                
+                // Navigate to suggestions screen
+                showScreen('screen-3');
+            }, 3000);
+        }
+        
+        // Reset Screen 2
+        function resetScreen2() {
+            stopCamera();
+            capturedImageData = null;
+            
+            // Reset buttons
+            document.getElementById('start-camera-btn').disabled = false;
+            document.getElementById('start-camera-btn').classList.remove('opacity-50', 'cursor-not-allowed');
+            document.getElementById('capture-btn').disabled = true;
+            document.getElementById('get-style-btn').disabled = true;
+            
+            // Clear status message
+            document.getElementById('photo-status').textContent = '';
+            document.getElementById('photo-status').classList.remove('text-green-600', 'text-red-600', 'text-brand-text', 'font-semibold');
         }
         
         // Save to closet function
